@@ -39,7 +39,7 @@ const toggle = document.getElementById('navToggle');
     if (selectedItems.size === 0) return;
     const list = Array.from(selectedItems).map(n => '- ' + n).join('%0A');
     const message = `Hi C'ee Optometrist, I'd like to enquire about:%0A${list}%0A%0APlease let me know availability and pricing.`;
-    window.open(`https://wa.me/27183840594?text=${message}`, '_blank');
+    window.open(`https://wa.me/27731121488?text=${message}`, '_blank');
   });
 
   document.getElementById('clearEnquiryBtn').addEventListener('click', () => {
@@ -117,3 +117,46 @@ const toggle = document.getElementById('navToggle');
     if (e.key === 'ArrowLeft' && currentImages.length > 1) lightboxPrev.click();
     if (e.key === 'ArrowRight' && currentImages.length > 1) lightboxNext.click();
   });
+
+  // Booking form: send in the background and show the result on the page
+  const bookingForm = document.getElementById('bookingForm');
+  if (bookingForm) {
+    const statusEl = document.getElementById('formStatus');
+    const submitBtn = bookingForm.querySelector('button[type="submit"]');
+
+    bookingForm.addEventListener('submit', async (e) => {
+      const key = bookingForm.elements.access_key.value;
+
+      // Service not set up yet: fall back to the visitor's email app
+      if (!key || key.startsWith('YOUR_')) {
+        bookingForm.querySelectorAll('input[type="hidden"], .hp').forEach(el => { el.disabled = true; });
+        return;
+      }
+
+      e.preventDefault();
+      statusEl.className = 'form-status sending';
+      statusEl.textContent = 'Sending your request…';
+      submitBtn.disabled = true;
+
+      try {
+        const res = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify(Object.fromEntries(new FormData(bookingForm)))
+        });
+        const data = await res.json();
+        if (res.ok && data.success) {
+          statusEl.className = 'form-status ok';
+          statusEl.textContent = "Thank you, your request has been sent. We'll contact you to confirm your appointment.";
+          bookingForm.reset();
+        } else {
+          throw new Error(data.message || 'Request failed');
+        }
+      } catch (err) {
+        statusEl.className = 'form-status error';
+        statusEl.textContent = "Sorry, your request wasn't sent. Please try again, or call 018 384 0594 or message us on WhatsApp.";
+      } finally {
+        submitBtn.disabled = false;
+      }
+    });
+  }
