@@ -27,17 +27,46 @@ Open `index.html` in a browser. Keep the folder structure as it is so the styles
 ```
 index.html     page content
 styles.css     all styling
-script.js      mobile menu, enquiry cart, image lightbox
+products.js    the frames and lenses list (edit this to change products and prices)
+script.js      builds the product grids, mobile menu, enquiry cart, image lightbox
 images/        logos, product photos, team and doctor photos
 ```
 
-## Adding extra product angles
+## Adding or changing products
 
-Each product image has a `data-images` attribute. Add more comma-separated image paths to enable the angle switcher in the lightbox:
+Products live in `products.js`, so there is no HTML to copy. Save the photos in `images/`, then copy an entry and change the values.
 
-```html
-<img src="images/carrera.jpg" data-images="images/carrera.jpg,images/carrera-side.jpg,images/carrera-angle.jpg" class="lightbox-trigger" alt="...">
+A frame with one colour:
+
+```js
+{
+  name: "Carrera Aviator",
+  group: "sunglasses",           // "sunglasses", "optical", "budget" or "lenses"
+  price: 2000,                   // rand, or null to show "Ask in store"
+  images: ["images/carrera.jpg"],
+  alt: "Carrera aviator sunglasses, matte black and gold",
+  enquiry: "Carrera Aviator sunglasses"
+}
 ```
+
+A frame in several colours shows a colour dot for each. Tapping a dot swaps the photo and the name used in the WhatsApp enquiry:
+
+```js
+{
+  name: "Teardrop Aviator",
+  group: "budget",
+  price: 2000,                   // one price for every colour
+  enquiry: "Budget Teardrop Aviator frame",
+  colors: [
+    { name: "White & red", swatch: ["#dddbca", "#d8452d"], images: ["images/teardrop-white-red-1.jpg"] },
+    { name: "Pink & mint", swatch: ["#f2a6c2", "#a6dcc3"], images: ["images/teardrop-pink-mint-1.jpg"] }
+  ]
+}
+```
+
+- **Angles:** add more paths to a colour's `images`, for example `["images/a-1.jpg", "images/a-2.jpg", "images/a-3.jpg"]`. The lightbox then shows arrows and dots for that colour.
+- **Dot colour:** `swatch` is one colour (`"#c42a2e"`) or two for a two-tone frame (`["#dddbca", "#d8452d"]`).
+- **Shared photo:** a colour with no `images` uses the product's own `images` (the contact lenses do this until each colour has a photo).
 
 ## Deployment
 
