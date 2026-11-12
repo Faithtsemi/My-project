@@ -1,3 +1,123 @@
+// WhatsApp number that receives enquiries: country code first, no + or spaces.
+// Keep it the same as the wa.me links in index.html.
+const WHATSAPP_NUMBER = '27731121488';
+
+// Items the visitor has added to their enquiry (filled in by the cart code further down)
+const selectedItems = new Set();
+
+// Product grids: build each group from the PRODUCTS list (see products.js)
+const EYE_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>';
+
+function formatPrice(price) {
+  return typeof price === 'number' ? 'R ' + price.toLocaleString('en-US') : 'Ask in store';
+}
+
+// A product with no "colors" list is treated as a single colour.
+// A colour without its own "images" falls back to the product's "images".
+function colorsOf(p) {
+  if (p.colors && p.colors.length) {
+    return p.colors.map(c => ({ ...c, images: c.images && c.images.length ? c.images : p.images }));
+  }
+  return [{ name: null, swatch: null, images: p.images }];
+}
+
+// swatch can be one colour ("#c42a2e") or two for a two-tone frame (["#dddbca", "#d8452d"])
+function swatchBackground(swatch) {
+  if (Array.isArray(swatch)) {
+    return 'linear-gradient(135deg, ' + swatch[0] + ' 0 50%, ' + swatch[1] + ' 50% 100%)';
+  }
+  return swatch || '#cccccc';
+}
+
+function buildProductCard(p, reserveColorRows) {
+  const colors = colorsOf(p);
+  const multi = colors.length > 1;
+  const baseEnquiry = p.enquiry || p.name;
+
+  const card = document.createElement('div');
+  card.className = 'mini-item';
+
+  const img = document.createElement('img');
+  img.className = 'lightbox-trigger';
+
+  const name = document.createElement('span');
+  name.textContent = p.name;
+
+  const price = document.createElement('span');
+  price.className = 'price';
+  price.textContent = formatPrice(p.price);
+
+  const view = document.createElement('button');
+  view.className = 'view-icon';
+  view.setAttribute('aria-label', 'View larger');
+  view.innerHTML = EYE_ICON;
+
+  const add = document.createElement('button');
+  add.className = 'add-btn';
+
+  card.append(img, name);
+
+  let dots = [];
+  let colorName = null;
+  if (multi || reserveColorRows) {
+    // when any card in this grid has colours, every card keeps the same rows so prices line up
+    const swatches = document.createElement('div');
+    swatches.className = 'swatches';
+    colorName = document.createElement('span');
+    colorName.className = 'color-name';
+    if (multi) {
+      swatches.setAttribute('role', 'group');
+      swatches.setAttribute('aria-label', 'Colours for ' + p.name);
+      dots = colors.map((c, i) => {
+        const dot = document.createElement('button');
+        dot.type = 'button';
+        dot.className = 'swatch';
+        dot.title = c.name;
+        dot.setAttribute('aria-label', 'Colour: ' + c.name);
+        dot.style.background = swatchBackground(c.swatch);
+        dot.addEventListener('click', () => showColor(i));
+        swatches.appendChild(dot);
+        return dot;
+      });
+    }
+    card.append(swatches, colorName);
+  }
+
+  card.append(price, view, add);
+
+  // push the colour dots / price / buttons to the bottom of the card, so prices line up
+  // across a row even when one name wraps onto two lines
+  (card.querySelector('.swatches') || price).classList.add('push-down');
+
+  function showColor(i) {
+    const c = colors[i];
+    img.src = c.images[0];
+    img.alt = multi ? (c.alt || p.name + ', ' + c.name) : (p.alt || p.name);
+    img.dataset.images = c.images.join(',');
+    add.dataset.name = multi ? baseEnquiry + ' (' + c.name + ')' : baseEnquiry;
+    syncAddButton(add);
+    if (multi) {
+      colorName.textContent = c.name;
+      dots.forEach((d, j) => d.setAttribute('aria-pressed', String(j === i)));
+    }
+  }
+  showColor(0);
+  return card;
+}
+
+document.querySelectorAll('[data-group]').forEach(grid => {
+  const items = PRODUCTS.filter(p => p.group === grid.dataset.group);
+  if (items.length === 0) {
+    // nothing in this group: hide its heading and grid
+    const heading = grid.previousElementSibling;
+    if (heading && heading.classList.contains('product-subhead')) heading.remove();
+    grid.remove();
+    return;
+  }
+  const reserve = items.some(p => colorsOf(p).length > 1);
+  grid.replaceChildren(...items.map(p => buildProductCard(p, reserve)));
+});
+
 const toggle = document.getElementById('navToggle');
   const links = document.getElementById('navLinks');
   toggle.addEventListener('click', () => {
@@ -9,8 +129,14 @@ const toggle = document.getElementById('navToggle');
     toggle.setAttribute('aria-expanded', 'false');
   }));
 
+  // Close the menu with Escape or a tap outside it
+  const closeNav = () => { links.classList.remove('open'); toggle.setAttribute('aria-expanded','false'); };
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeNav(); });
+  document.addEventListener('click', e => {
+    if (!links.contains(e.target) && !toggle.contains(e.target)) closeNav();
+  });
+
   // Enquiry cart
-  const selectedItems = new Set();
   const enquiryBar = document.getElementById('enquiryBar');
   const enquiryCount = document.getElementById('enquiryCount');
 
@@ -19,35 +145,33 @@ const toggle = document.getElementById('navToggle');
     enquiryBar.classList.toggle('visible', selectedItems.size > 0);
   }
 
+  // keeps a "+ Add" button in step with what is selected (also used when a colour changes)
+  function syncAddButton(btn) {
+    const on = selectedItems.has(btn.dataset.name);
+    btn.classList.toggle('added', on);
+    btn.textContent = on ? '\u2713 Added' : '+ Add';
+  }
+
   document.querySelectorAll('.add-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const name = btn.dataset.name;
-      if (selectedItems.has(name)) {
-        selectedItems.delete(name);
-        btn.classList.remove('added');
-        btn.textContent = '+ Add';
-      } else {
-        selectedItems.add(name);
-        btn.classList.add('added');
-        btn.textContent = '✓ Added';
-      }
+      if (selectedItems.has(name)) selectedItems.delete(name);
+      else selectedItems.add(name);
+      syncAddButton(btn);
       updateBar();
     });
   });
 
   document.getElementById('sendEnquiryBtn').addEventListener('click', () => {
     if (selectedItems.size === 0) return;
-    const list = Array.from(selectedItems).map(n => '- ' + n).join('%0A');
-    const message = `Hi C'ee Optometrist, I'd like to enquire about:%0A${list}%0A%0APlease let me know availability and pricing.`;
-    window.open(`https://wa.me/27731121488?text=${message}`, '_blank');
+    const list = Array.from(selectedItems).map(n => '- ' + n).join('\n');
+    const message = "Hi C'ee Optometrist, I'd like to enquire about:\n" + list + '\n\nPlease let me know availability and pricing.';
+    window.open('https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(message), '_blank');
   });
 
   document.getElementById('clearEnquiryBtn').addEventListener('click', () => {
     selectedItems.clear();
-    document.querySelectorAll('.add-btn.added').forEach(btn => {
-      btn.classList.remove('added');
-      btn.textContent = '+ Add';
-    });
+    document.querySelectorAll('.add-btn').forEach(syncAddButton);
     updateBar();
   });
 

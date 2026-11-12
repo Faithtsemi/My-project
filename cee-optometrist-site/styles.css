@@ -13,7 +13,7 @@
   }
 
   *{ box-sizing:border-box; }
-  html{ scroll-behavior:smooth; }
+  html{ scroll-behavior:smooth; scroll-padding-top:76px; }
   body{
     margin:0;
     background:var(--paper);
@@ -55,11 +55,12 @@
 
   /* ---------- Header ---------- */
   header{
-    position:sticky; top:0; z-index:100;
-    background:rgba(247,241,228,0.94);
-    backdrop-filter:blur(8px);
+    position:sticky; top:0; z-index:160;
+    background:var(--paper);
     border-bottom:1px solid var(--line);
   }
+  /* solid background on purpose: a blurred (backdrop-filter) sticky header can
+     flicker or vanish during long smooth scrolls in Chrome */
   .nav-row{
     display:flex; align-items:center; justify-content:space-between;
     height:76px;
@@ -258,6 +259,20 @@
   }
   .mini-icon svg{ width:36%; height:36%; color:var(--amber); }
   .mini-item span{ font-size:0.9rem; color:var(--teal-deep); }
+  .mini-item .role{ font-size:0.82rem; color:var(--teal-mid); }
+  .mini-item .push-down{ margin-top:auto; padding-top:6px; }
+  .swatches{ display:flex; justify-content:center; flex-wrap:wrap; gap:8px; min-height:20px; margin:2px 0 0; }
+  .swatch{
+    position:relative;
+    width:18px; height:18px;
+    border-radius:50%;
+    border:1px solid rgba(43,32,19,0.30);
+    padding:0;
+    cursor:pointer;
+  }
+  .swatch::after{ content:""; position:absolute; inset:-5px; }
+  .swatch[aria-pressed="true"]{ outline:2px solid var(--teal-deep); outline-offset:2px; }
+  .mini-item .color-name{ font-size:0.8rem; color:var(--teal-mid); min-height:1.3em; line-height:1.3; margin-bottom:2px; }
   .mini-item .price{ font-size:0.85rem; color:var(--amber); font-weight:500; margin-top:2px; }
   .view-icon{
     margin-top:8px;
@@ -300,21 +315,22 @@
   /* ---------- About ---------- */
   .about{
     display:grid;
-    grid-template-columns:1.15fr 0.85fr;
+    grid-template-columns:0.85fr 1.15fr;
     gap:56px;
-    align-items:start;
+    align-items:center;
   }
+  .about-figure{
+    background:var(--teal-deep);
+    aspect-ratio:4/5;
+    border-radius:var(--radius);
+    overflow:hidden;
+  }
+  .about-figure img{ width:100%; height:100%; object-fit:cover; display:block; }
   .about-copy h2{ font-size:clamp(1.9rem, 3vw, 2.4rem); margin-bottom:14px; }
   .about-copy p + p{ margin-top:16px; }
   .about-copy p{ color:#33474f; }
-  .credentials-card{
-    background:var(--paper);
-    border:1px solid var(--line);
-    border-radius:var(--radius);
-    padding:28px 30px;
-  }
-  .credentials-card h3{ font-size:1.15rem; margin-bottom:16px; }
   .credentials{
+    margin-top:28px;
     display:flex; flex-direction:column; gap:10px;
   }
   .credentials div{
@@ -560,14 +576,24 @@
   /* ---------- Responsive ---------- */
   @media (max-width: 880px){
     nav.links{
-      position:fixed; inset:76px 0 0 0;
+      position:fixed; top:76px; left:0; right:0;
       background:var(--paper);
-      flex-direction:column; align-items:flex-start;
-      padding:30px 28px; gap:22px;
-      transform:translateX(100%);
-      transition:transform .25s ease;
+      border-bottom:1px solid var(--line);
+      box-shadow:0 18px 30px -12px rgba(51,39,26,.25);
+      flex-direction:column; align-items:stretch;
+      padding:8px 28px 20px; gap:0;
+      opacity:0; visibility:hidden; transform:translateY(-8px);
+      transition:opacity .2s ease, transform .2s ease, visibility 0s linear .2s;
     }
-    nav.links.open{ transform:translateX(0); }
+    nav.links a{
+      font-size:1.05rem; padding:16px 2px;
+      border-bottom:1px solid var(--line);
+    }
+    nav.links a:last-child{ border-bottom:0; }
+    nav.links.open{
+      opacity:1; visibility:visible; transform:none;
+      transition:opacity .2s ease, transform .2s ease, visibility 0s;
+    }
     .nav-toggle{ display:block; }
     .hero-bg{
       background:
@@ -583,6 +609,7 @@
     .insurance-strip{ flex-direction:column; align-items:flex-start; }
     .reviews-row{ flex-direction:column; align-items:flex-start; }
     .about{ grid-template-columns:1fr; }
+    .about-figure{ max-width:320px; margin:0 auto; }
     .insurance-panel{ grid-template-columns:1fr; padding:36px 26px; }
     .branch-grid{ grid-template-columns:1fr; }
     .contact-shell{ grid-template-columns:1fr; }
