@@ -32,24 +32,20 @@ const PRODUCTS = [
     enquiry: "Polaroid Shield sunglasses"
   },
   {
-    name: "Fossil Aviator",
+    name: "Fossil Aviator Brown",
     group: "sunglasses",
     price: 2000,
-    enquiry: "Fossil Aviator sunglasses",
-    colors: [
-      {
-        name: "Brown gradient",
-        swatch: "#6b5040",
-        images: ["images/fossil-aviator-brown-1.jpg", "images/fossil-aviator-brown-2.jpg", "images/fossil-aviator-brown-3.jpg"],
-        alt: "Fossil aviator sunglasses, gold frame, brown gradient lens"
-      },
-      {
-        name: "Blue-grey gradient",
-        swatch: "#5f6584",
-        images: ["images/fossil-aviator-bluegrey-1.jpg", "images/fossil-aviator-bluegrey-2.jpg", "images/fossil-aviator-bluegrey-3.jpg", "images/fossil-aviator-bluegrey-4.jpg"],
-        alt: "Fossil aviator sunglasses, gold frame, blue-grey gradient lens"
-      }
-    ]
+    images: ["images/fossil-aviator-brown-1.jpg", "images/fossil-aviator-brown-2.jpg", "images/fossil-aviator-brown-3.jpg"],
+    alt: "Fossil aviator sunglasses, gold frame, brown gradient lens",
+    enquiry: "Fossil Aviator sunglasses (brown gradient lens)"
+  },
+  {
+    name: "Fossil Aviator Blue-Grey",
+    group: "sunglasses",
+    price: 2000,
+    images: ["images/fossil-aviator-bluegrey-1.jpg", "images/fossil-aviator-bluegrey-2.jpg", "images/fossil-aviator-bluegrey-3.jpg", "images/fossil-aviator-bluegrey-4.jpg"],
+    alt: "Fossil aviator sunglasses, gold frame, blue-grey gradient lens",
+    enquiry: "Fossil Aviator sunglasses (blue-grey gradient lens)"
   },
   {
     name: "Under Armour Gameday Jr",
@@ -60,12 +56,20 @@ const PRODUCTS = [
     enquiry: "Under Armour Gameday Jr (youth) sunglasses"
   },
   {
-    name: "Carrera Aviator",
+    name: "Carrera Aviator Matte",
     group: "sunglasses",
     price: 2000,
     images: ["images/carrera.jpg"],
     alt: "Carrera aviator sunglasses, matte black and gold",
-    enquiry: "Carrera Aviator sunglasses"
+    enquiry: "Carrera Aviator sunglasses (matte black and gold)"
+  },
+  {
+    name: "Carrera Aviator Gloss",
+    group: "sunglasses",
+    price: 2000,
+    images: ["images/carrera-black-1.jpg", "images/carrera-black-2.jpg", "images/carrera-black-3.jpg"],
+    alt: "Carrera aviator sunglasses, gloss black with grey gradient polarized lenses",
+    enquiry: "Carrera Aviator sunglasses (gloss black)"
   },
   {
     name: "Carrera Rimless",
@@ -84,12 +88,20 @@ const PRODUCTS = [
     enquiry: "Fossil Square sunglasses"
   },
   {
-    name: "Privé Revaux Clear",
+    name: "Privé Revaux Cat-Eye Clear",
     group: "sunglasses",
     price: 2000,
-    images: ["images/reveaux-clear.jpg"],
-    alt: "Privé Revaux clear cat-eye sunglasses, polarized",
-    enquiry: "Privé Revaux Clear sunglasses"
+    images: ["images/reveaux-cat-clear-1.jpg", "images/reveaux-cat-clear-2.jpg", "images/reveaux-cat-clear-3.jpg"],
+    alt: "Privé Revaux clear cat-eye sunglasses with blue polarized lenses",
+    enquiry: "Privé Revaux clear cat-eye sunglasses"
+  },
+  {
+    name: "Privé Revaux Cat-Eye Black",
+    group: "sunglasses",
+    price: 2000,
+    images: ["images/reveaux-cat-black-1.jpg", "images/reveaux-cat-black-2.jpg"],
+    alt: "Privé Revaux black cat-eye sunglasses with dark lenses",
+    enquiry: "Privé Revaux black cat-eye sunglasses"
   },
 
   // ---------- OPTICAL FRAMES ----------
@@ -102,12 +114,20 @@ const PRODUCTS = [
     enquiry: "Dsquared2 optical frame"
   },
   {
-    name: "Moschino",
+    name: "Moschino Black",
     group: "optical",
     price: 2000,
     images: ["images/moschino.jpg"],
     alt: "Moschino optical frame, black square acetate",
-    enquiry: "Moschino optical frame"
+    enquiry: "Moschino optical frame (black)"
+  },
+  {
+    name: "Moschino Green",
+    group: "optical",
+    price: 2000,
+    images: ["images/moschino-green-1.jpg", "images/moschino-green-2.jpg"],
+    alt: "Moschino optical frame, green front with grey temples",
+    enquiry: "Moschino optical frame (green and grey)"
   },
   {
     name: "Privé Revaux Blue Light",
@@ -123,11 +143,109 @@ const PRODUCTS = [
       },
       {
         name: "Olive",
-        swatch: "#2a2c24",
-        images: ["images/reveaux-olive.jpg"],
+        swatch: "#5f7d68",
+        images: ["images/reveaux-olive-1.jpg", "images/reveaux-olive-2.jpg", "images/reveaux-olive-3.jpg", "images/reveaux-olive-4.jpg"],
         alt: "Privé Revaux blue-light optical frame, olive"
       }
     ]
+  },
+  {
+    name: "FUBU Grey",
+    group: "optical",
+    price: 2000,
+    images: ["images/fubu-1.jpg", "images/fubu-2.jpg", "images/fubu-3.jpg"],
+    alt: "FUBU optical frame, grey crystal acetate with gold wing detail",
+    enquiry: "FUBU optical frame (grey crystal)"
+  },
+  {
+    name: "Karl Lagerfeld",
+    group: "optical",
+    price: 2000,
+    images: ["images/karl-lagerfeld-1.jpg", "images/karl-lagerfeld-2.jpg", "images/karl-lagerfeld-3.jpg"],
+    alt: "Karl Lagerfeld optical frame, blue crystal acetate",
+    enquiry: "Karl Lagerfeld optical frame"
+  },
+  {
+    name: "Tom Ford Black",
+    group: "optical",
+    price: 2000,
+    images: ["images/tom-ford-1.jpg", "images/tom-ford-2.jpg", "images/tom-ford-3.jpg"],
+    alt: "Tom Ford optical frame, black acetate with gold T detail",
+    enquiry: "Tom Ford optical frame (black)"
+  },
+  {
+    name: "Tom Ford Red",
+    group: "optical",
+    price: 2000,
+    images: ["images/tom-ford-red-1.jpg", "images/tom-ford-red-2.jpg", "images/tom-ford-red-3.jpg"],
+    alt: "Tom Ford optical frame, red front with tortoiseshell temples",
+    enquiry: "Tom Ford optical frame (red and tortoiseshell)"
+  },
+  {
+    name: "Prada",
+    group: "optical",
+    price: 2000,
+    images: ["images/prada-1.jpg", "images/prada-2.jpg", "images/prada-3.jpg"],
+    alt: "Prada optical frame, black acetate cat-eye with triangle logo on the temples",
+    enquiry: "Prada optical frame"
+  },
+
+
+  {
+    name: "FUBU Clear Round",
+    group: "optical",
+    price: 2000,
+    images: ["images/fubu-clear-1.jpg", "images/fubu-clear-2.jpg", "images/fubu-clear-3.jpg"],
+    alt: "Round optical frame, clear acetate with gold hinge detail",
+    enquiry: "FUBU clear round optical frame"
+  },
+  {
+    name: "Leo Grey Tortoise",
+    group: "optical",
+    price: 2000,
+    images: ["images/leo-grey-tortoise-1.jpg", "images/leo-grey-tortoise-2.jpg", "images/leo-grey-tortoise-3.jpg"],
+    alt: "Leo cat-eye frame, grey tortoiseshell with pale grey brow",
+    enquiry: "Leo grey tortoise optical frame"
+  },
+  {
+    name: "Leo Navy Square",
+    group: "optical",
+    price: 2000,
+    images: ["images/leo-navy-1.jpg", "images/leo-navy-2.jpg", "images/leo-navy-3.jpg"],
+    alt: "Leo square frame, navy blue acetate",
+    enquiry: "Leo navy square optical frame"
+  },
+  {
+    name: "Leo Blue Metal",
+    group: "optical",
+    price: 2000,
+    images: ["images/leo-blue-metal-1.jpg", "images/leo-blue-metal-2.jpg", "images/leo-blue-metal-3.jpg"],
+    alt: "Leo round metal frame, blue and silver",
+    enquiry: "Leo blue metal optical frame"
+  },
+  {
+    name: "Leo Red & Gold",
+    group: "optical",
+    price: 2000,
+    images: ["images/leo-red-gold-1.jpg", "images/leo-red-gold-2.jpg", "images/leo-red-gold-3.jpg"],
+    alt: "Leo browline frame, gold metal with black and red brow",
+    enquiry: "Leo red and gold optical frame"
+  },
+  {
+    name: "Leo Teal & Gold",
+    group: "optical",
+    price: 2000,
+    images: ["images/leo-teal-gold-1.jpg", "images/leo-teal-gold-2.jpg", "images/leo-teal-gold-3.jpg"],
+    alt: "Leo browline frame, gold metal with teal and orange brow",
+    enquiry: "Leo teal and gold optical frame"
+  },
+  {
+    name: "Leo Purple Tortoise",
+    group: "optical",
+    price: 2000,
+    images: ["images/leo-purple-tortoise-1.jpg", "images/leo-purple-tortoise-2.jpg", "images/leo-purple-tortoise-3.jpg"],
+    alt: "Leo cat-eye frame, purple and blue tortoiseshell with a purple brow",
+    enquiry: "Leo purple tortoise optical frame"
   },
 
   // ---------- BUDGET FRAMES ----------
@@ -166,6 +284,54 @@ const PRODUCTS = [
     images: ["images/blue-geometric-1.jpg", "images/blue-geometric-2.jpg"],
     alt: "Blue geometric aviator frame with green tips",
     enquiry: "Budget Geometric Aviator frame"
+  },
+  {
+    name: "Black & Gold Round",
+    group: "budget",
+    price: 2000,
+    images: ["images/black-gold-round-1.jpg", "images/black-gold-round-2.jpg", "images/black-gold-round-3.jpg"],
+    alt: "Round optical frame, black front with gold metal bridge and temples",
+    enquiry: "Budget black and gold round frame"
+  },
+  {
+    name: "Tortoise Round",
+    group: "budget",
+    price: 2000,
+    images: ["images/tortoise-round-1.jpg", "images/tortoise-round-2.jpg", "images/tortoise-round-3.jpg"],
+    alt: "Round acetate optical frame, tortoiseshell with an orange rim",
+    enquiry: "Tortoise round budget frame"
+  },
+  {
+    name: "Lilac Square",
+    group: "budget",
+    price: 2000,
+    images: ["images/lilac-square-1.jpg", "images/lilac-square-2.jpg", "images/lilac-square-3.jpg"],
+    alt: "Square acetate optical frame, clear with a lilac rim and lilac temples",
+    enquiry: "Lilac square budget frame"
+  },
+  {
+    name: "Royal Blue Square",
+    group: "budget",
+    price: 2000,
+    images: ["images/royal-blue-1.jpg", "images/royal-blue-2.jpg", "images/royal-blue-3.jpg", "images/royal-blue-4.jpg"],
+    alt: "Square acetate optical frame, grey with a royal blue rim and temples",
+    enquiry: "Royal blue square budget frame"
+  },
+  {
+    name: "Neon Pink Cat-Eye",
+    group: "budget",
+    price: 2000,
+    images: ["images/neon-pink-1.jpg", "images/neon-pink-2.jpg", "images/neon-pink-3.jpg"],
+    alt: "Cat-eye acetate optical frame, clear with a neon pink rim",
+    enquiry: "Neon pink cat-eye budget frame"
+  },
+  {
+    name: "Amber Aviator",
+    group: "budget",
+    price: 2000,
+    images: ["images/amber-aviator-1.jpg", "images/amber-aviator-2.jpg", "images/amber-aviator-3.jpg"],
+    alt: "Double-bridge acetate optical frame, amber and dark brown",
+    enquiry: "Amber aviator budget frame"
   },
 
   // ---------- CONTACT LENSES ----------

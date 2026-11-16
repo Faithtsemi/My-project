@@ -116,6 +116,31 @@ document.querySelectorAll('[data-group]').forEach(grid => {
   }
   const reserve = items.some(p => colorsOf(p).length > 1);
   grid.replaceChildren(...items.map(p => buildProductCard(p, reserve)));
+
+  // Optional "Load more": data-initial="8" shows the first 8 cards, the rest sit behind a button
+  const initial = parseInt(grid.dataset.initial, 10);
+  if (initial && items.length > initial) {
+    const extra = [...grid.children].slice(initial);
+    extra.forEach(card => { card.hidden = true; });
+    const wrap = document.createElement('div');
+    wrap.className = 'load-more-wrap';
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'btn btn-ghost';
+    btn.textContent = 'Load more';
+    let expanded = false;
+    btn.setAttribute('aria-expanded', 'false');
+    btn.addEventListener('click', () => {
+      expanded = !expanded;
+      extra.forEach(card => { card.hidden = !expanded; });
+      btn.textContent = expanded ? 'Load less' : 'Load more';
+      btn.setAttribute('aria-expanded', expanded);
+      // going back to "less": return to the top of the section so the page doesn't jump
+      if (!expanded) grid.scrollIntoView({ block: 'center' });
+    });
+    wrap.appendChild(btn);
+    grid.after(wrap);
+  }
 });
 
 const toggle = document.getElementById('navToggle');
